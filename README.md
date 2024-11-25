@@ -1,6 +1,8 @@
 # 飞镖ROS工作空间
 > 本工作空间是飞镖机器人的**ROS**工作空间，包含了飞镖机器人的所有ROS功能包。
 
+> 目前工作流依赖`Github Pull Request`，需要**fork**仓库之后向上游提交pull request。
+
 ```mermaid
 graph LR
     A[Dart ROS2 Workspace] --> B[dart_msgs]
