@@ -17,7 +17,7 @@ find_package(image_transport REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 
-set(SOURCES src/node_detector.cpp src/detect.cpp)
+set(SOURCES src/node_detector.cpp src/detect/detect.cpp)
 
 # dart_detector node executable
 add_executable(dart_detector_node ${SOURCES})
@@ -94,7 +94,7 @@ ament_target_dependencies(camera_node rclcpp sensor_msgs image_transport
 add_executable(parameter_node src/Parameters.cpp)
 target_include_directories(parameter_node PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(parameter_node ${OpenCV_LIBRARIES})
-target_sources(parameter_node PRIVATE src/detect.cpp)
+target_sources(parameter_node PRIVATE src/detect/detect.cpp)
 ament_target_dependencies(parameter_node)
 
 install(TARGETS dart_detector_node camera_node parameter_node

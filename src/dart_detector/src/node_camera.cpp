@@ -31,6 +31,7 @@ private:
             RCLCPP_ERROR(this->get_logger(), "!!!!!!!!!!!!!!!!!!!!!no camera!!!!!!!!!!!!!!!!!!!!!!!!!");
             rclcpp::shutdown();
         }
+        RCLCPP_INFO(this->get_logger(), "Camera initialized, setting parameters...");
         _videoCapture.setExposureTime(exposure_time);
         _videoCapture.setVideoFormat(1280, 1024, true);
         _videoCapture.setFPS(30.0);
@@ -42,7 +43,7 @@ private:
         _videoCapture.closeStream();
 
         _videoCapture.startStream();
-        RCLCPP_INFO(this->get_logger(), "Camera initialized.");
+        RCLCPP_INFO(this->get_logger(), "Camera started.");
     }
 
     void camera_capture_thread()
