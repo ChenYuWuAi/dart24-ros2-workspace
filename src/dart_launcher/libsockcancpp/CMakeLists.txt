@@ -4,7 +4,7 @@ PROJECT(socketcancpp)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include/exceptions)
 
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 if(BUILD_SHARED_LIBS)
     add_library(socketcancpp SHARED src/CanDriver.cpp)

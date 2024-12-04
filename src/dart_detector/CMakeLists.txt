@@ -17,7 +17,7 @@ find_package(image_transport REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 
-set(SOURCES src/node_detector.cpp src/dart_detector.cpp)
+set(SOURCES src/node_detector.cpp src/detect.cpp)
 
 # dart_detector node executable
 add_executable(dart_detector_node ${SOURCES})
@@ -56,6 +56,9 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
     ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/cameraDriver/DHCamera_arm64
     ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/cameraDriver/DHCamera_arm64/lib
   )
+
+  target_link_libraries(camera_node ${OpenCV_LIBS} MVSDK)
+
 elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
   message(STATUS "x86_64")
   target_include_directories(
@@ -68,10 +71,22 @@ elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
   target_link_directories(
     camera_node PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/cameraDriver/DHCamera/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/cameraDriver/DHCamera)
+    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/cameraDriver/DHCamera
+    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/cameraDriver/DHCamera/lib/GenICam/bin/Linux64_x64
+    )
+  set(MVSDK_LIBS
+    log4cpp
+    GCBase_gcc421_v3_0
+    GenApi_gcc421_v3_0
+    Log_gcc421_v3_0
+    MathParser_gcc421_v3_0
+    XmlParser_gcc421_v3_0
+    NodeMapData_gcc421_v3_0
+    )
+  
+  target_link_libraries(camera_node ${OpenCV_LIBS} MVSDK ${MVSDK_LIBS})
 endif()
 
-target_link_libraries(camera_node ${OpenCV_LIBS} MVSDK)
 
 ament_target_dependencies(camera_node rclcpp sensor_msgs image_transport
   cv_bridge)
@@ -84,6 +99,15 @@ ament_target_dependencies(parameter_node)
 
 install(TARGETS dart_detector_node camera_node parameter_node
   DESTINATION lib/${PROJECT_NAME})
+
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+  install(
+    DIRECTORY
+    camera_driver/cameraDriver/DHCamera/lib/GenICam/bin/Linux64_x64/
+    camera_driver/cameraDriver/DHCamera/lib/
+    DESTINATION lib
+    FILES_MATCHING PATTERN "*.so")
+endif()
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
