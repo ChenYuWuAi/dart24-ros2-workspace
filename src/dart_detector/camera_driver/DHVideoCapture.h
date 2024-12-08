@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
+#include"CameraDriver.hpp"
 #include "GenICam/StreamSource.h"
 #include "GenICam/System.h"
 #include "GenICam/Camera.h"

@@ -1,0 +1,411 @@
+[33mcommit 16a30f7c88fee820e567ba5477656e86ad5596fd[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdart25[m[33m, [m[1;31mupstream/dart25[m[33m, [m[1;31morigin/dart25[m[33m)[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Wed Dec 4 11:38:11 2024 +0800
+
+    更新構建系統，以使得x86_64平臺可以直接編譯
+
+[33mcommit 4a2d3a2fdc79eaa2c61b2dd26b5485f427ccf6f7[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Wed Nov 27 01:19:35 2024 +0800
+
+    加入脚注
+
+[33mcommit 1b5e0cfde7e18697e6d93d5f8b9576abff192774[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Wed Nov 27 01:15:12 2024 +0800
+
+    BMS文档更新
+
+[33mcommit 6b6f2e4ce6b7c7348d7bd69f6fa730193d25abf6[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Wed Nov 27 00:05:19 2024 +0800
+
+    解决charlie复用led部分情况下关不掉的bug
+
+[33mcommit a684d05735db88b233204750b11380156a2b31b2[m
+Author: bioArtificialCNN <chenyuwuai@gmail.com>
+Date:   Mon Nov 25 16:53:43 2024 +0800
+
+    Update README.md (#1)
+
+[33mcommit a65ffc56260458d1d5cf9b8e335309bf565f556d[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Mon Nov 25 16:38:19 2024 +0800
+
+    完成LED 查理复用代码和部分I2C读取代码
+
+[33mcommit 84e873685841f77735cd7695a4cf57b0d36adc90[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Fri Nov 22 00:25:36 2024 +0800
+
+    IMU debug完毕，可使用
+
+[33mcommit 70d0bd2fd908ebaa994716bafc683abc5a5ed060[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Thu Nov 21 23:28:15 2024 +0800
+
+    IMU Hardware Interface 初版
+
+[33mcommit dc06d561d850a0bf84fd4962d917b3c77b838afc[m
+Merge: 238226c c1bcb76
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Thu Nov 21 00:49:58 2024 +0800
+
+    Merge branch 'dart25' of github.com:ChenYuWuAi/dart-ros2-workspace into dart25
+
+[33mcommit 238226ce4892d2125b7565199d3258d24dbadf25[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Thu Nov 21 00:49:16 2024 +0800
+
+    进一步分析了架构
+
+[33mcommit c1bcb76145aac9fb679b027643a06a793f7c9029[m
+Author: 程浩 Cheng Hao <chengnangong@163.com>
+Date:   Mon Nov 18 18:27:10 2024 +0800
+
+    Update README.md
+
+[33mcommit 3f14fd893569e6e34990ad033c7bdf208a22ff8d[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Mon Nov 18 18:22:46 2024 +0800
+
+    补充部分架构图
+
+[33mcommit bac8f84a2a9fbd08a57dd78029820b0d7a5cad70[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Mon Nov 18 10:40:30 2024 +0800
+
+    重构项目结构、修改交叉编译工具链、实现舵机硬件接口开发、完善URDF
+
+[33mcommit 3272508121760569cb6a806d7aafc6cfee1a77ca[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Sun Nov 10 23:46:36 2024 +0800
+
+    进一步重构代码
+
+[33mcommit c724feb6bbf29294e26cdeaee6207141aa69ef51[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Sun Nov 10 22:21:55 2024 +0800
+
+    ADD LICENSE
+
+[33mcommit 250e92bae8e08fdb8345a6b052143594e6418209[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Sun Nov 10 21:39:02 2024 +0800
+
+    重构文件结构
+
+[33mcommit 1b2e79814087ceb752fe8dafafbc389d7af7979c[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Sun Nov 10 21:25:32 2024 +0800
+
+    Migrate to CubeMX latest version
+
+[33mcommit 23640a518177841ebfebe7ba5d71a3e4776be3b0[m
+Merge: 82aa9ec d12f861
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Sun Nov 10 20:44:19 2024 +0800
+
+    Merge branch 'dart25' of https://github.com/ChenYuWuAi/dart24-ros2-workspace into dart25
+
+[33mcommit 82aa9ec0cfc9fb6e4e3eff875c2c85b991fdddeb[m
+Author: ChenYuWuAi <chengnangong@163.com>
+Date:   Sun Nov 10 20:40:20 2024 +0800
+
+    add stlink.cfg
+
+[33mcommit d12f861545385ee1df1bac8bbe516ed81b9b147e[m
+Author: chenghao <chengnangong@163.com>
+Date:   Sun Nov 10 20:37:17 2024 +0800
+
+    更新状态机
+
+[33mcommit 47d359cef5a52fe5a0f690d4c84dc99b5169862b[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sun Sep 15 23:58:16 2024 +0800
+
+    完成DBUS、裁判系统、电机、电机PID控制器、舵机、测速器、LED流水灯部分代码
+
+[33mcommit 48955982ec3318b0ab191da0b4fa24346a0d092f[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sun Sep 15 23:57:58 2024 +0800
+
+    完成DBUS、裁判系统、电机、电机PID控制器、舵机、测速器、LED流水灯部分代码
+
+[33mcommit 59a78ab69a3a671fe3a059bad011a865f16a75a5[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Wed Sep 11 13:12:50 2024 +0800
+
+    删去Microros stm32 utils
+
+[33mcommit 416ef92749997501e411d0e7b2c2d7f2a60a88c1[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Wed Sep 11 13:11:14 2024 +0800
+
+    删除不必要文件
+
+[33mcommit d7bacb57f4174af71a86fe357c153f4a2da5a58a[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Wed Sep 11 13:10:46 2024 +0800
+
+    扬声器库实现
+
+[33mcommit eef2082d96672732aac576a47326b68c46cacfd5[m
+Merge: b329c2f 36685d4
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Sep 10 16:49:11 2024 +0800
+
+    Merge branch 'dart24' of gitee.com:SEU-3SE/dartros2workspace into dart25
+
+[33mcommit b329c2f495690ec557311be4bc524e13afec6e1d[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Sep 10 16:42:01 2024 +0800
+
+    重新编译MicroROS
+
+[33mcommit 36685d4fb74ed520e1f21bb2eb5fbb00b4407394[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Sep 10 16:15:38 2024 +0800
+
+    重新编译MicroROS
+
+[33mcommit 0786bdddef8c8a18a4719650dfffc2428059b1f6[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Sep 10 16:15:17 2024 +0800
+
+    重新编译MicroROS
+
+[33mcommit ff5d5e8966dade55bf1976e87a3eea1358d4c898[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Tue Sep 10 02:37:11 2024 +0800
+
+    rebuild lib
+
+[33mcommit c51d9d66c9c36b0672178db426dfdf4a3e2a90c7[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Sep 10 02:15:04 2024 +0800
+
+    更新状态机程序
+
+[33mcommit dbf9f65e018aae5fcf0389bab5296bb1f7de0db9[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Sep 9 22:50:40 2024 +0800
+
+    initial commit for dart_mcu
+
+[33mcommit 38baa1656776e5b09986ca9ccb49267059ee520d[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Thu Aug 29 20:38:48 2024 +0800
+
+    更新
+
+[33mcommit 95eb7181582f8c214f4962ae339271e9e7bc5457[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Aug 6 06:25:13 2024 +0800
+
+    线程安全
+
+[33mcommit bbab2f707dbbf37f4dd07f261915ecddf59e199e[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Jul 30 06:04:05 2024 +0800
+
+    update db & 看门狗
+
+[33mcommit eb088c5adf189cb40cfaa2ec3494c70920617214[m
+Merge: 1552532 61c4a86
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Jul 30 00:06:32 2024 +0800
+
+    Merge branch 'develop'
+
+[33mcommit 15525320884a94ec7641e5743b231c5c4a173faf[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Jul 30 00:03:26 2024 +0800
+
+    update config
+
+[33mcommit 61c4a860a67059a122ceada3aae906ab490da8a4[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Jul 30 00:01:25 2024 +0800
+
+    飞镖现在可以在屏幕上更改yaw摆角、转速差，根据距离解算
+
+[33mcommit 293749c891fdaf323fdfcf6c53b8aaea55166b3f[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Jul 29 15:42:22 2024 +0800
+
+    保存
+
+[33mcommit 545e60df5b0fad8f64ecd7d28ea1811398e48798[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sun Jul 28 16:49:18 2024 +0800
+
+    加入比赛运行时飞镖速率解算
+
+[33mcommit d1fcc3ae5252a4fb43bbc29601e27cdcd853e44f[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sun Jul 28 15:09:08 2024 +0800
+
+    加入比赛时计算
+
+[33mcommit 9cb9947ac3d282f90045d1304ca36d96c158135b[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sat Jul 27 16:36:31 2024 +0800
+
+    update
+
+[33mcommit 87aa2213635256c728f6ac01ebeaa2ed2a278c55[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Thu Jul 25 15:09:00 2024 +0800
+
+    更新动静态库选择
+
+[33mcommit 68509350c31674c3896a79f1b5e885723cdafe88[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Tue Jul 23 22:20:55 2024 +0800
+
+    update config
+
+[33mcommit 5d552696d364a6cd232dc4cfe30457595dca6879[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Jul 22 18:09:37 2024 +0800
+
+    first boot modify
+
+[33mcommit 63e4078e9a0953ada91717d88a909542c0df7b40[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Jul 22 18:04:11 2024 +0800
+
+    修改数据类型
+
+[33mcommit f93791ceeb28284d8c6bbf6b529da25dd7f0fc58[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Jul 22 17:58:42 2024 +0800
+
+    加入电流数据
+
+[33mcommit 90ffbd4330e4b272bcfed5d92ffd09c3b30130c6[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Mon Jul 22 16:03:29 2024 +0800
+
+    update
+
+[33mcommit 84b47a73980449eafa8444b973d57d602d849ff3[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Mon Jul 22 15:32:14 2024 +0800
+
+    update
+
+[33mcommit 120f52268a14ed892534d589c2da7b4964123ef8[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Jul 22 15:15:37 2024 +0800
+
+    update
+
+[33mcommit 7e15dc4ed23ff3ffb2ec312e5e32f94824cc4ae6[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Mon Jul 22 14:28:17 2024 +0800
+
+    update param
+
+[33mcommit 6883fcf99bfeb38326d1c5ed715b07a1bb0515be[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Mon Jul 22 14:19:23 2024 +0800
+
+    config
+
+[33mcommit 62dd9b86f3b1fdf0a1247c9302c90ea0536648f3[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Mon Jul 22 14:14:19 2024 +0800
+
+    update config
+
+[33mcommit 5c1c8b9224f9684a0c476691e35702d51cd47d4d[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Mon Jul 22 14:12:12 2024 +0800
+
+    gitignore
+
+[33mcommit a67f8692618e9afd6c0ab1a722d0e5b058d1cf62[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Jul 22 14:09:14 2024 +0800
+
+    update camera
+
+[33mcommit feb86b75a979f69e8aa3e6575f5e508423229685[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Mon Jul 22 14:08:24 2024 +0800
+
+    update config
+
+[33mcommit 14c2ba4d248d1548321c1815f493b1e6b19821b8[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Jul 22 13:01:52 2024 +0800
+
+    update parameter
+
+[33mcommit 35a6687fafe82096e91ca9527b17ef962b088713[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Mon Jul 22 01:36:57 2024 +0800
+
+    算法bug
+
+[33mcommit 1efcb4589379a07b480df6899c67bd9f1ef94173[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sun Jul 21 20:51:20 2024 +0800
+
+    算法已经能由屏幕看见
+
+[33mcommit c0cf7cfec2f3216c95f6a8680e3cbd128b8ac600[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Sun Jul 21 15:02:25 2024 +0800
+
+    update camera driver
+
+[33mcommit 41839130d7df29d17b9229388e389d8ffb5777d9[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sat Jul 20 23:12:58 2024 +0800
+
+    加入相机
+
+[33mcommit 972500499312acad598f256264e0faa209b43609[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sat Jul 20 18:05:42 2024 +0800
+
+    现在可以通过屏幕调参
+
+[33mcommit 884b95de68bdccb7c3a1c1e6b97c43bb93f5a361[m
+Author: chenyuwuai <chengnangong@163.com>
+Date:   Fri Jul 19 22:09:50 2024 +0800
+
+    更新控制节点
+
+[33mcommit 59a1d0770f4124be62dcaed4e9d2d2680cbed161[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Fri Jul 19 00:34:31 2024 +0800
+
+    修复界面的bug
+
+[33mcommit 6873dc3ca3383c9be14c8d452da9166de05c870b[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Thu Jul 18 15:51:13 2024 +0800
+
+    更新launch file
+
+[33mcommit 3883c548cd14f7c10a976007dd184eecf4c02443[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sat Jul 13 20:42:46 2024 +0800
+
+    launch shell file set
+
+[33mcommit 7838bd0d03efbaeb37daa67192ef71b096aee9e2[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sat Jul 13 14:27:44 2024 +0800
+
+    launch file set
+
+[33mcommit 4b7e75575f3fd141e4ed5f4094792e7c6b2fa769[m
+Author: ChengHao <chengnangong@163.com>
+Date:   Sat Jul 13 10:51:04 2024 +0800
+
+    Initial Commit

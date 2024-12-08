@@ -9,39 +9,42 @@
 #include <ctime>
 #include <sstream>
 #include <unistd.h>
-
-#include "DHVideoCapture.h"
+#include <rclcpp_lifecycle/lifecycle_node.hpp>
+#include <rclcpp_lifecycle/lifecycle_publisher.hpp>
+ #include "DHVideoCapture.h"
 
 using namespace std::chrono_literals;
 
-class NodeCamera : public rclcpp::Node
+class NodeCamera : public rclcpp_lifecycle::LifecycleNode
 {
 private:
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_test_;
+    rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>::SharedPtr publisher_test_;
     rclcpp::TimerBase::SharedPtr timer_;
 
-    DHVideoCapture _videoCapture;
+    CameraDriver* _videoCapture;
     int exposure_time;
 
     void initCamera(int exposure_time) // 1-3ms 0=>auto
     {
+        //do sth to make sure you open the right camera
+        //_videoCapture=new VideoCapture;
         RCLCPP_INFO(this->get_logger(), "Initializing camera...");
-        if (!_videoCapture.open(0, 2))
-        {
-            RCLCPP_ERROR(this->get_logger(), "!!!!!!!!!!!!!!!!!!!!!no camera!!!!!!!!!!!!!!!!!!!!!!!!!");
-            rclcpp::shutdown();
-        }
-        _videoCapture.setExposureTime(exposure_time);
-        _videoCapture.setVideoFormat(1280, 1024, true);
-        _videoCapture.setFPS(30.0);
-        _videoCapture.setBalanceRatio(1.6, 1.3, 2.0, true);
-        _videoCapture.setGain(1);
-        _videoCapture.setGamma(1);
+        // if (!_videoCapture.open(0, 2))
+        // {
+        //     RCLCPP_ERROR(this->get_logger(), "!!!!!!!!!!!!!!!!!!!!!no camera!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //     rclcpp::shutdown();
+        // }
+        // _videoCapture->setExposureTime(exposure_time);
+        // _videoCapture->setVideoFormat(1280, 1024, true);
+        // _videoCapture->setFPS(30.0);
+        // _videoCapture->setBalanceRatio(1.6, 1.3, 2.0, true);
+        // _videoCapture->setGain(1);
+        // _videoCapture->setGamma(1);
 
-        _videoCapture.startStream();
-        _videoCapture.closeStream();
+        // _videoCapture->startStream();
+        // _videoCapture->closeStream();
 
-        _videoCapture.startStream();
+        // _videoCapture->startStream();
         RCLCPP_INFO(this->get_logger(), "Camera initialized.");
     }
 
@@ -63,7 +66,7 @@ private:
 
         while (rclcpp::ok())
         {
-            _videoCapture.read(image);
+            _videoCapture->read(image);
             video.write(image);
 
             // 每3次发布图像 帧率10fps
@@ -80,9 +83,14 @@ private:
     }
 
 public:
-    NodeCamera() : Node("camera")
+   explicit NodeCamera(bool intra_process_comms = false)
+   : rclcpp_lifecycle::LifecycleNode("camera",
+      rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
     {
         exposure_time = 0;
+    }
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_configure(
+        const rclcpp_lifecycle::State& pre_state) {
         publisher_test_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 1);
         initCamera(exposure_time);
         std::thread(std::bind(&NodeCamera::camera_capture_thread, this)).detach();
@@ -95,16 +103,62 @@ public:
             if(exposure_time_present != exposure_time)
             {
                 exposure_time = exposure_time_present;
-                _videoCapture.setExposureTime(exposure_time);
+                //_videoCapture->setExposureTime(exposure_time);
                 RCLCPP_INFO(this->get_logger(), "Exposure time set to: %d", exposure_time);
             } });
+        RCLCPP_INFO(this->get_logger(), 
+            "Camera_Node on_configure is called for initial, pre state is %s", pre_state.label().c_str());
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
     }
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_activate(
+        const rclcpp_lifecycle::State& pre_state) {
+        LifecycleNode::on_activate(pre_state);
+
+        RCLCPP_INFO(this->get_logger(), 
+            "Camera_Node on_activate is called, pre state is %s", pre_state.label().c_str());
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_deactivate(
+        const rclcpp_lifecycle::State& pre_state) {
+        LifecycleNode::on_deactivate(pre_state);
+
+        RCLCPP_INFO(this->get_logger(), 
+            "Camera_Noder on_deactivate is called, pre state is %s", pre_state.label().c_str());
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }    
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_cleanup(
+        const rclcpp_lifecycle::State& pre_state) {
+        // 释放资源，清空智能指针
+        publisher_test_.reset();
+        timer_.reset();
+        _videoCapture=0;
+        RCLCPP_INFO(this->get_logger(), 
+            "LifecycleTalker on_cleanup is called, pre state is %s", pre_state.label().c_str());
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }  
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_shutdown(
+        const rclcpp_lifecycle::State& pre_state) {
+        // 释放资源，清空智能指针
+        publisher_test_.reset();
+        timer_.reset();
+        _videoCapture=0;
+        RCLCPP_INFO(this->get_logger(), 
+            "LifecycleTalker on_shutdown is called, pre state is %s", pre_state.label().c_str());
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }  
+
 };
 
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<NodeCamera>());
+    auto node=std::make_shared<NodeCamera>();
+    rclcpp::spin(node->get_node_base_interface());
     rclcpp::shutdown();
     return 0;
 }

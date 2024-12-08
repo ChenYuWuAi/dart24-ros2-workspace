@@ -3,26 +3,81 @@
 #include <sensor_msgs/msg/image.hpp>
 #include "geometry_msgs/msg/point.hpp"
 #include <cv_bridge/cv_bridge.hpp>
-#include <image_transport/image_transport.hpp>
 #include "dart_msgs/msg/green_light.hpp"
+#include <rclcpp_lifecycle/lifecycle_node.hpp>
+#include <rclcpp_lifecycle/lifecycle_publisher.hpp>
 #include "detect/detect.h"
 #include <chrono>
 
-class DetectPublisher : public rclcpp::Node
+class DetectPublisher : public rclcpp_lifecycle::LifecycleNode
 {
+ private:
+    TopArmorDetect detector_;
+    rclcpp_lifecycle::LifecyclePublisher<dart_msgs::msg::GreenLight>::SharedPtr publisher_;
+    // image_transport::Publisher image_publisher_;
+    // image_transport::Subscriber image_subscriber_;
+    rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>::SharedPtr image_publisher_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
 public:
-    DetectPublisher(std::chrono::milliseconds interval)
-        : Node("dart_detector_node"), it_(std::make_shared<rclcpp::Node>("dart_detector_publisher"))
+    DetectPublisher(std::chrono::milliseconds interval,bool intra_process_comms = false)
+        : rclcpp_lifecycle::LifecycleNode(("dart_detector_node"), 
+        rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
     {
-        publisher_ = this->create_publisher<dart_msgs::msg::GreenLight>(
+        
+    }
+ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_configure
+ (const rclcpp_lifecycle::State& pre_state)
+ {
+
+      publisher_ = this->create_publisher<dart_msgs::msg::GreenLight>(
             "dart_detector/locate",
             rclcpp::QoS(rclcpp::KeepLast(10)).durability_volatile().reliable());
-        // image_publisher_ = it_.advertise("dart_detector/image", 1);
-        // image_subscriber_ = it_.subscribe("camera/image", 1, &DetectPublisher::image_callback, this);
         image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("dart_detector/image", 1);
-        image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>("camera/image", 1, std::bind(&DetectPublisher::image_callback, this, std::placeholders::_1));
-        RCLCPP_INFO(this->get_logger(), "DetectPublisher has been started.");
+        image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>("camera/image", 1,
+         std::bind(&DetectPublisher::image_callback, this, std::placeholders::_1));
+         RCLCPP_INFO(this->get_logger(), 
+            "Node_detector on_configure is called for initial, pre state is %s", 
+            pre_state.label().c_str());
+     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
     }
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_activate(
+        const rclcpp_lifecycle::State& pre_state) {
+        LifecycleNode::on_activate(pre_state);
+        RCLCPP_INFO(this->get_logger(), 
+            "Camera_Node on_activate is called, pre state is %s", pre_state.label().c_str());
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_deactivate(
+        const rclcpp_lifecycle::State& pre_state) {
+        LifecycleNode::on_deactivate(pre_state);
+
+        RCLCPP_INFO(this->get_logger(), 
+            "Camera_Noder on_deactivate is called, pre state is %s", pre_state.label().c_str());
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }   
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_cleanup(
+        const rclcpp_lifecycle::State& pre_state) {
+        // 释放资源，清空智能指针
+        publisher_.reset();
+        image_publisher_.reset();
+        image_subscriber_.reset();
+        RCLCPP_INFO(this->get_logger(), 
+            "LifecycleTalker on_cleanup is called, pre state is %s", pre_state.label().c_str());
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }   
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_shutdown(
+        const rclcpp_lifecycle::State& pre_state) {
+        // 释放资源，清空智能指针
+        publisher_.reset();
+        image_publisher_.reset();
+        image_subscriber_.reset();
+        RCLCPP_INFO(this->get_logger(), 
+            "LifecycleTalker on_shutdown is called, pre state is %s", pre_state.label().c_str());
+
+        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+    }  
 
 private:
     cv::Mat perform_detection(cv::Mat &frame, bool &is_detected, double &x, double &y)
@@ -34,7 +89,7 @@ private:
             detector_.getResult(center);
             x = center.x;
             y = center.y;
-        }
+      ;  }
         return detector_.drawRaw();
     }
 
@@ -69,13 +124,7 @@ private:
         }
     }
 
-    TopArmorDetect detector_;
-    rclcpp::Publisher<dart_msgs::msg::GreenLight>::SharedPtr publisher_;
-    image_transport::ImageTransport it_;
-    // image_transport::Publisher image_publisher_;
-    // image_transport::Subscriber image_subscriber_;
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_publisher_;
-    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
+   
 };
 
 int main(int argc, char *argv[])
@@ -86,7 +135,7 @@ int main(int argc, char *argv[])
 
     auto node = std::make_shared<DetectPublisher>(interval);
 
-    rclcpp::spin(node);
+    rclcpp::spin(node->get_node_base_interface());
     rclcpp::shutdown();
     return 0;
 }
