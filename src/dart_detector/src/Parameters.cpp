@@ -8,7 +8,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "../include/detect/detect.h"
+#include "detect.h"
 
 using namespace cv;
 using namespace std;
@@ -50,10 +50,10 @@ int param2_Max = 50;
 
 string dstName = "dst";
 
-void saveParameters(const string& filename="./src/dart_detector/config/config.csv") 
+void saveParameters(const string &filename = "./src/dart_detector/config/config.csv")
 {
     ofstream file(filename);
-    if (file.is_open()) 
+    if (file.is_open())
     {
         file << "hmin," << hmin << endl;
         file << "hmax," << hmax << endl;
@@ -68,50 +68,61 @@ void saveParameters(const string& filename="./src/dart_detector/config/config.cs
         file << "param2," << param2 << endl;
         file.close();
         cout << "Parameters saved to " << filename << endl;
-    } 
-    else 
+    }
+    else
     {
         cerr << "Error opening file for writing: " << filename << endl;
     }
 }
 
-void loadParameters(const std::string& paramFile="./src/dart_detector/config/config.csv")
+void loadParameters(const std::string &paramFile = "./src/dart_detector/config/config.csv")
 {
     ifstream file(paramFile);
-    if (!file.is_open()) 
+    if (!file.is_open())
     {
         cerr << "check config path: " << paramFile << std::endl;
         return;
     }
 
     string line;
-    while (std::getline(file, line)) 
+    while (std::getline(file, line))
     {
         istringstream iss(line);
         string key;
         int value;
-        if (getline(iss, key, ',') && iss >> value) 
+        if (getline(iss, key, ',') && iss >> value)
         {
-            if (key == "hmin") hmin = value;
-            else if (key == "hmax") hmax = value;
-            else if (key == "smin") smin = value;
-            else if (key == "smax") smax = value;
-            else if (key == "vmin") vmin = value;
-            else if (key == "vmax") vmax = value;
-            else if (key == "minDist") minDist = value;
-            else if (key == "rmin") rmin = value;
-            else if (key == "rmax") rmax = value;
-            else if (key == "param1") param1 = value;
-            else if (key == "param2") param2 = value;
+            if (key == "hmin")
+                hmin = value;
+            else if (key == "hmax")
+                hmax = value;
+            else if (key == "smin")
+                smin = value;
+            else if (key == "smax")
+                smax = value;
+            else if (key == "vmin")
+                vmin = value;
+            else if (key == "vmax")
+                vmax = value;
+            else if (key == "minDist")
+                minDist = value;
+            else if (key == "rmin")
+                rmin = value;
+            else if (key == "rmax")
+                rmax = value;
+            else if (key == "param1")
+                param1 = value;
+            else if (key == "param2")
+                param2 = value;
         }
     }
 
     file.close();
 }
 
-void callBack(int, void*)
+void callBack(int, void *)
 {
-    if(hmin == 0 || hmax==0 || smin==0 || smax==0 || vmin==0 || vmax==0 || rmin==0 || rmax==0 || minDist==0 || param1==0 || param2==0)
+    if (hmin == 0 || hmax == 0 || smin == 0 || smax == 0 || vmin == 0 || vmax == 0 || rmin == 0 || rmax == 0 || minDist == 0 || param1 == 0 || param2 == 0)
     {
         return;
     }
@@ -123,37 +134,37 @@ void callBack(int, void*)
     imshow(dstName, dst);
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    if (argc == 2) 
+    if (argc == 2)
     {
         string input = argv[1];
-        if (input.find(".jpg") != string::npos || input.find(".png") != string::npos) 
+        if (input.find(".jpg") != string::npos || input.find(".png") != string::npos)
         {
             img = imread(input);
-            if (img.empty()) 
+            if (img.empty())
             {
                 cerr << "Check img path" << endl;
                 return -1;
             }
-        } 
-        else 
+        }
+        else
         {
             cap.open(input);
             cap >> img;
-            if (!cap.isOpened()) 
+            if (!cap.isOpened())
             {
                 cerr << "Check video path" << endl;
                 return -1;
             }
         }
-    } 
-    else 
+    }
+    else
     {
         cerr << "Usage: " << argv[0] << " <video_file>/or/<img_file>" << std::endl;
         return -1;
     }
-    
+
     // 颜色空间转换
     if (!img.empty())
     {
@@ -179,33 +190,32 @@ int main(int argc, char** argv)
 
     cout << "\n'n' to go to the next frame. \n's' to save the parameters to a CSV file.\nESC to exit." << endl;
 
-    while (true) 
+    while (true)
     {
         int key = waitKey(0);
-        if (key == 's') 
+        if (key == 's')
         {
             saveParameters();
             break;
-        } 
-        else if (key == 'n') 
+        }
+        else if (key == 'n')
         {
             if (cap.isOpened())
             {
                 cap >> img;
-                if(img.empty())
+                if (img.empty())
                 {
                     saveParameters();
                     break;
                 }
-                callBack(0,0);
+                callBack(0, 0);
             }
             else
             {
                 cout << "to end" << endl;
             }
-            
-        } 
-        else if (key == 27) 
+        }
+        else if (key == 27)
         { // ESC
             break;
         }
