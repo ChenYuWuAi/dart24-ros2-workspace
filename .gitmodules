@@ -1,0 +1,3 @@
+[submodule "src/dart_launcher/libsockcanpp"]
+	path = src/dart_launcher/libsockcanpp
+	url = git@github.com:ChenYuWuAi/libsockcanpp.git

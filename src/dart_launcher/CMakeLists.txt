@@ -61,11 +61,11 @@ target_link_libraries(node_lvgl_ui)
 add_executable(node_can_agent src/node_can_agent.cpp src/dart_config.cpp)
 ament_target_dependencies(node_can_agent rclcpp std_msgs dart_msgs std_srvs)
 
-# Add libsockcancpp support
-target_include_directories(node_can_agent PRIVATE libsockcancpp/include libsockcancpp/include/exceptions include)
+# Add libsockcanpp support
+target_include_directories(node_can_agent PRIVATE libsockcanpp/include libsockcanpp/include/exceptions include)
 
 # libsocketcancpp/lib/libsocketcancpp.so
-target_link_directories(node_can_agent PRIVATE libsockcancpp/lib)
+target_link_directories(node_can_agent PRIVATE libsockcanpp/lib)
 
 if(BUILD_SHARED_LIBS)
     target_link_libraries(node_can_agent socketcancpp)
@@ -123,7 +123,7 @@ if(BUILD_SHARED_LIBS)
     )
 
     install(DIRECTORY
-        libsockcancpp/lib/
+        libsockcanpp/lib/
         DESTINATION lib
         FILES_MATCHING PATTERN "*.so"
     )
