@@ -142,11 +142,21 @@ namespace dart_flysystem_hardware
         std::vector<hardware_interface::StateInterface> state_interfaces;
         for (const auto &joint : info_.joints)
         {
-            state_interfaces.emplace_back(hardware_interface::StateInterface(
-                joint.name, hardware_interface::HW_IF_POSITION, &angle_map_[joint.name]));
+            state_interfaces.emplace_back(
+                joint.name, hardware_interface::HW_IF_POSITION, &angle_map_[joint.name]);
             RCLCPP_INFO(
                 get_logger(),
                 "Joint '%s' state interface %s exported", joint.name.c_str(), joint.command_interfaces[0].name.c_str());
+        }
+        // 打印state_interfaces的内容
+        for (auto &state_interface : state_interfaces)
+        {
+            RCLCPP_INFO(
+                get_logger(),
+                "state_interface name: %s, interface_name: %s, interface_value: %f",
+                state_interface.get_name().c_str(),
+                state_interface.get_interface_name().c_str(),
+                state_interface.get_value());
         }
         return state_interfaces;
     }
@@ -157,8 +167,7 @@ namespace dart_flysystem_hardware
         for (const auto &joint : info_.joints)
         {
             command_interfaces.emplace_back(
-                hardware_interface::CommandInterface(
-                    joint.name, hardware_interface::HW_IF_POSITION, &angle_map_[joint.name]));
+                    joint.name, hardware_interface::HW_IF_POSITION, &angle_map_[joint.name]);
             RCLCPP_INFO(
                 get_logger(),
                 "Joint '%s' command interface %s exported", joint.name.c_str(), joint.command_interfaces[0].name.c_str());

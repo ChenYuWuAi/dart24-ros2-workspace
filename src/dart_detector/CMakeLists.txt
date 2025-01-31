@@ -3,7 +3,7 @@ project(dart_detector)
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+        add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
 # find dependencies
@@ -23,81 +23,87 @@ set(SOURCES src/node_detector.cpp src/detect.cpp)
 add_executable(dart_detector_node ${SOURCES})
 
 ament_target_dependencies(
-  dart_detector_node
-  rclcpp
-  std_msgs
-  rclcpp_lifecycle
-  geometry_msgs
-  dart_msgs
-  sensor_msgs
-  cv_bridge
-  )
+        dart_detector_node
+        rclcpp
+        std_msgs
+        rclcpp_lifecycle
+        geometry_msgs
+        dart_msgs
+        sensor_msgs
+        cv_bridge
+)
 
 target_include_directories(
-  dart_detector_node PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/
-  ${OpenCV_INCLUDE_DIRS})
+        dart_detector_node PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/
+        ${OpenCV_INCLUDE_DIRS})
 
 target_link_libraries(dart_detector_node ${OpenCV_LIBRARIES})
 
 # camera node executable
-add_executable(camera_node src/node_camera.cpp camera_driver/DHCameraDriver/DHVideoCapture.cpp)
+FILE(GLOB SOURCES_HAL_CAMERA src/camera_hal/*.cpp)
+add_executable(camera_node src/node_camera.cpp camera_driver/DHCameraDriver/DHVideoCapture.cpp ${SOURCES_HAL_CAMERA})
 
 
-ament_target_dependencies(camera_node rclcpp sensor_msgs 
-  cv_bridge rclcpp_lifecycle)
+ament_target_dependencies(camera_node rclcpp sensor_msgs
+        cv_bridge rclcpp_lifecycle)
 
 target_include_directories(
-    camera_node
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera # here
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/
-    ${OpenCV_INCLUDE_DIRS})
+        camera_node
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/
+        ${OpenCV_INCLUDE_DIRS})
 
- target_link_directories(
-    camera_node PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera)
 # structure judge
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-  message(STATUS "aarch64")
-  target_include_directories(
-    camera_node PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera_arm64 # here
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/
-    ${OpenCV_INCLUDE_DIRS})
+        message(STATUS "aarch64")
+        target_include_directories(
+                camera_node
+                PRIVATE
+                ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera_arm64 # here
+                ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/
+                ${OpenCV_INCLUDE_DIRS})
 
-  target_link_directories(
-    camera_node PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera_arm64
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera_arm64/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera/lib/GenICam/bin/Linux64_x64
-  )
+        target_link_directories(
+                camera_node PRIVATE
+                ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera_arm64/lib
+        )
+        set(MVSDK_LIBS
+                log4cpp
+                log4cpp_gcc485_v3_0
+                GCBase_gcc485_v3_0
+                GenApi_gcc485_v3_0
+                Log_gcc485_v3_0
+                MathParser_gcc485_v3_0
+                XmlParser_gcc485_v3_0
+                NodeMapData_gcc485_v3_0
+                ImageConvert
+        )
+        target_link_libraries(camera_node ${OpenCV_LIBS} MVSDK ${MVSDK_LIBS})
 elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-  message(STATUS "x86_64")
-  target_include_directories(
-    camera_node
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera # here
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/
-    ${OpenCV_INCLUDE_DIRS})
+        message(STATUS "x86_64")
+        target_include_directories(
+                camera_node
+                PRIVATE
+                ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera # here
+                ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/
+                ${OpenCV_INCLUDE_DIRS})
 
-  target_link_directories(
-    camera_node PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera/lib/GenICam/bin/Linux64_x64
-    )
-    set(MVSDK_LIBS
-    log4cpp
-    GCBase_gcc421_v3_0
-    GenApi_gcc421_v3_0
-    Log_gcc421_v3_0
-    MathParser_gcc421_v3_0
-    XmlParser_gcc421_v3_0
-    NodeMapData_gcc421_v3_0
-    )
-  target_link_libraries(camera_node ${OpenCV_LIBS} MVSDK ${MVSDK_LIBS})
+        target_link_directories(
+                camera_node PRIVATE
+                ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera/lib
+                ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera
+                ${CMAKE_CURRENT_SOURCE_DIR}/camera_driver/DHCameraDriver/DHCamera/lib/GenICam/bin/Linux64_x64
+        )
+        set(MVSDK_LIBS
+                log4cpp
+                GCBase_gcc421_v3_0
+                GenApi_gcc421_v3_0
+                Log_gcc421_v3_0
+                MathParser_gcc421_v3_0
+                XmlParser_gcc421_v3_0
+                NodeMapData_gcc421_v3_0
+        )
+        target_link_libraries(camera_node ${OpenCV_LIBS} MVSDK ${MVSDK_LIBS})
 endif()
 
 
@@ -108,20 +114,43 @@ target_sources(parameter_node PRIVATE src/detect.cpp)
 ament_target_dependencies(parameter_node)
 
 install(TARGETS dart_detector_node camera_node parameter_node
-  DESTINATION lib/${PROJECT_NAME})
+        DESTINATION lib/${PROJECT_NAME})
+
+# 导出需要的共享库
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+        install(DIRECTORY
+                camera_driver/DHCameraDriver/DHCamera_arm64/lib/
+                DESTINATION lib
+                FILES_MATCHING
+                PATTERN "*.so"
+        )
+
+elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+        install(DIRECTORY
+                camera_driver/DHCameraDriver/DHCamera/lib/
+                DESTINATION lib
+                FILES_MATCHING
+                PATTERN "*.so"
+        )
+endif()
 
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
+        find_package(ament_lint_auto REQUIRED)
 
-  # the following line skips the linter which checks for copyrights comment the
-  # line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
+        # the following line skips the linter which checks for copyrights comment the
+        # line when a copyright and license is added to all source files
+        set(ament_cmake_copyright_FOUND TRUE)
 
-  # the following line skips cpplint (only works in a git repo) comment the line
-  # when this package is in a git repo and when a copyright and  license is
-  # added to all source files
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
+        # the following line skips cpplint (only works in a git repo) comment the line
+        # when this package is in a git repo and when a copyright and  license is
+        # added to all source files
+        set(ament_cmake_cpplint_FOUND TRUE)
+        ament_lint_auto_find_test_dependencies()
 endif()
+
+install(DIRECTORY
+        config
+        DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()

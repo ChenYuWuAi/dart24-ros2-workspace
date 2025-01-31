@@ -28,7 +28,7 @@ fi
 echo -e "\033[1;32mBuilding the docker image for $ARCH\033[0m"
 
 # Build the docker image, if fails, stop the script
-docker build . --platform=$TARGET_ARCH -t $TAG --load  # Limit the number of CPUs used by the container
+docker build . --platform=$TARGET_ARCH -t $TAG --load  --network host # Limit the number of CPUs used by the container
 if [ $? -ne 0 ]; then
     echo -e "\033[1;31mFailed to build the docker image\033[0m"
     exit 1

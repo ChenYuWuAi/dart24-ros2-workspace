@@ -15,7 +15,7 @@
 #include "Memory/SharedPtr.h"
 #include "Infra/CString.h"
 #include <cstring>
-#include  <opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 #include <sstream>
 
 using namespace cv;
@@ -34,8 +34,8 @@ public:
     bool open(const int id, int size_buffer = 2);
     bool isOpened();
 
-//    void setBufferSize(size_t bsize);;
-    bool write(string para_name,string para_value);
+    //    void setBufferSize(size_t bsize);;
+    bool write(std::string para_name, std::string para_value);
     bool setVideoFormat(size_t width, size_t height, bool mjpg = 1);
     bool setExposureTime(int t = 0);
     bool changeVideoFormat(int width, int height, bool mjpg = 1);

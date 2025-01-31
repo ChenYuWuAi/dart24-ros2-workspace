@@ -1,0 +1,6 @@
+/camera:
+  ros__parameters:
+    camera_type: "v4l2"
+    camera_params: ["DevicePath=/dev/video0", "Exposure=1575", "AnalogueGain=512", "Gain=256"]
+    image_width: 1280
+    image_height: 720

@@ -204,6 +204,8 @@ namespace dart_flysystem_hardware
             tcflush(serial_fd_, TCOFLUSH);
             tcflush(serial_fd_, TCIOFLUSH);
 
+            
+
             for (size_t i = 0; i < 3; i++)
             {
                 WitReadReg(AX, 3); // 读取加速度Ax
