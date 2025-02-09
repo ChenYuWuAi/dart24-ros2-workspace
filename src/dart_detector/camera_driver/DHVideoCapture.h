@@ -38,7 +38,7 @@ public:
     bool isOpened();
 
 //    void setBufferSize(size_t bsize);;
-    bool write(string para_name,string para_value);
+    bool write(std::string para_name,std::string para_value);
     bool setVideoFormat(size_t width, size_t height, bool mjpg = 1);
     bool setExposureTime(int t = 0);
     bool changeVideoFormat(int width, int height, bool mjpg = 1);

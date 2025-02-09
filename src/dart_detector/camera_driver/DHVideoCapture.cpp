@@ -127,7 +127,7 @@ bool DHVideoCapture::startStream()
     }
 }
 
-bool DHVideoCapture::write(string para_name,string para_value){
+bool DHVideoCapture::write(std::string para_name,std::string para_value){
     if(para_name=="width"){
         unsigned long int width=atoi(para_value.c_str());
          if( width == _resolution[0] )

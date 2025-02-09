@@ -9,21 +9,22 @@
 #include "detect/detect.h"
 #include <chrono>
 
+
+
 class DetectPublisher : public rclcpp_lifecycle::LifecycleNode
 {
  private:
     TopArmorDetect detector_;
     rclcpp_lifecycle::LifecyclePublisher<dart_msgs::msg::GreenLight>::SharedPtr publisher_;
-    // image_transport::Publisher image_publisher_;
-    // image_transport::Subscriber image_subscriber_;
     rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>::SharedPtr image_publisher_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
+    
 public:
     DetectPublisher(std::chrono::milliseconds interval,bool intra_process_comms = false)
         : rclcpp_lifecycle::LifecycleNode(("dart_detector_node"), 
         rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
     {
-        
+         
     }
  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_configure
  (const rclcpp_lifecycle::State& pre_state)
@@ -78,6 +79,7 @@ public:
 
         return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
     }  
+
 
 private:
     cv::Mat perform_detection(cv::Mat &frame, bool &is_detected, double &x, double &y)

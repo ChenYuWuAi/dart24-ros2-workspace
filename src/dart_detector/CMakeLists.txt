@@ -16,8 +16,14 @@ find_package(dart_msgs REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(rcutils REQUIRED)
+find_package(rclcpp_components REQUIRED)
+find_package(rcl_interfaces REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(rmw REQUIRED)
 
-set(SOURCES src/node_detector.cpp src/detect/detect.cpp)
+
+set(SOURCES src/node_detector.cpp src/detect/detect.cpp )
 
 # dart_detector node executable
 add_executable(dart_detector_node ${SOURCES})
@@ -31,6 +37,7 @@ ament_target_dependencies(
   dart_msgs
   sensor_msgs
   cv_bridge
+  rcutils
   )
 
 target_include_directories(
@@ -99,14 +106,20 @@ elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
   target_link_libraries(camera_node ${OpenCV_LIBS} MVSDK ${MVSDK_LIBS})
 endif()
 
+add_executable(Parameters_client src/Parameters_client.cpp src/persist_parameter_client.cpp)
+target_include_directories(Parameters_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(Parameters_client ${OpenCV_LIBRARIES} rclcpp::rclcpp
+rcutils::rcutils)
+target_sources(Parameters_client PRIVATE src/detect/detect.cpp)
+ament_target_dependencies(Parameters_client rclcpp rclcpp_components std_msgs rcutils rcl_interfaces)
 
 add_executable(parameter_node src/Parameters.cpp)
 target_include_directories(parameter_node PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(parameter_node ${OpenCV_LIBRARIES})
-target_sources(parameter_node PRIVATE src/detect/detect.cpp)
-ament_target_dependencies(parameter_node)
 
-install(TARGETS dart_detector_node camera_node parameter_node
+target_sources(parameter_node PRIVATE src/detect/detect.cpp)
+
+install(TARGETS dart_detector_node camera_node parameter_node Parameters_client
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

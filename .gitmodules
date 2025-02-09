@@ -1,0 +1,3 @@
+[submodule "src/src/ros2_persist_parameter_server"]
+	path = src/src/ros2_persist_parameter_server
+	url = https://github.com/ljungyi/ros2_persist_parameter_server.git
