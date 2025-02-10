@@ -24,7 +24,7 @@ PersistParametersClient::PersistParametersClient(
   const std::string & remote_node_name)
   : Node(client_name, node_options)
 {
-  sync_param_client_ = std::make_unique<rclcpp::SyncParametersClient>(this, remote_node_name);
+  sync_param_client_ = std::make_shared<rclcpp::SyncParametersClient>(this, remote_node_name);
 }
 
 bool PersistParametersClient::read_parameter(const std::string & param_name, std::vector<rclcpp::Parameter> & parameter)

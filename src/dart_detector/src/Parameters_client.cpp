@@ -93,57 +93,57 @@ void parameter_callback(const rcl_interfaces::msg::ParameterEvent::SharedPtr msg
         for (const auto &changed_parameter : msg->changed_parameters) {
             if (changed_parameter.name == "persistent.hmin") {
                 hmin = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated hmin to %d", hmin);
+                RCLCPP_INFO(client_logger_, "Updated hmin to %d", hmin);
                 sync_other_nodes_parameters("hmin", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.hmax") {
                 hmax = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated hmax to %d", hmax);
+                RCLCPP_INFO(client_logger_, "Updated hmax to %d", hmax);
                 sync_other_nodes_parameters("hmax", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.smin") {
                 smin = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated smin to %d", smin);
+                RCLCPP_INFO(client_logger_, "Updated smin to %d", smin);
                 sync_other_nodes_parameters("smin", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.smax") {
                 smax = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated smax to %d", smax);
+                RCLCPP_INFO(client_logger_, "Updated smax to %d", smax);
                 sync_other_nodes_parameters("smax", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.vmin") {
                 vmin = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated vmin to %d", vmin);
+                RCLCPP_INFO(client_logger_, "Updated vmin to %d", vmin);
                 sync_other_nodes_parameters("vmin", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.vmax") {
                 vmax = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated vmax to %d", vmax);
+                RCLCPP_INFO(client_logger_, "Updated vmax to %d", vmax);
                 sync_other_nodes_parameters("vmax", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.minDist") {
                 minDist = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated minDist to %d", minDist);
+                RCLCPP_INFO(client_logger_, "Updated minDist to %d", minDist);
                 sync_other_nodes_parameters("minDist", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.rmin") {
                 rmin = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated rmin to %d", rmin);
+                RCLCPP_INFO(client_logger_, "Updated rmin to %d", rmin);
                 sync_other_nodes_parameters("rmin", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.rmax") {
                 rmax = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated rmax to %d", rmax);
+                RCLCPP_INFO(client_logger_, "Updated rmax to %d", rmax);
                 sync_other_nodes_parameters("rmax", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.param1") {
                 param1 = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated param1 to %d", param1);
+                RCLCPP_INFO(client_logger_, "Updated param1 to %d", param1);
                 sync_other_nodes_parameters("param1", changed_parameter.value);
             }
             else if (changed_parameter.name == "persistent.param2") {
                 param2 = changed_parameter.value.integer_value;
-                RCLCPP_INFO(this->get_logger(), "Updated param2 to %d", param2);
+                RCLCPP_INFO(client_logger_, "Updated param2 to %d", param2);
                 sync_other_nodes_parameters("param2", changed_parameter.value);
             }
         }
@@ -153,7 +153,7 @@ void parameter_callback(const rcl_interfaces::msg::ParameterEvent::SharedPtr msg
     void sync_other_nodes_parameters(const std::string &param_name, const rcl_interfaces::msg::ParameterValue &param_value) {
         // 假设我们要同步的节点列表（可以根据实际需要修改）
         std::vector<std::string> other_nodes = {"node_detector"};
-
+       this->get_logger();
         for (const auto& node : other_nodes) {
             try {
                 // 调用服务设置其他节点的参数
@@ -184,10 +184,10 @@ void parameter_callback(const rcl_interfaces::msg::ParameterEvent::SharedPtr msg
         parameter.name = param_name;
         parameter.value = param_value;
         request->parameters.push_back(parameter);
-
+        
         // 发送请求并等待结果
         auto result = client->async_send_request(request);
-        if (rclcpp::spin_until_future_complete(&(this->persist_param_client_), result) != rclcpp::FutureReturnCode::SUCCESS) {
+        if (rclcpp::spin_until_future_complete(persist_param_client_ptr_,result) != rclcpp::FutureReturnCode::SUCCESS) {
             throw std::runtime_error("Failed to wait for service result.");
         }
         // 检查服务调用的实际结果
@@ -198,7 +198,7 @@ void parameter_callback(const rcl_interfaces::msg::ParameterEvent::SharedPtr msg
             }
         }
     }
-
+    std::shared_ptr<PersistParametersClient>  persist_param_client_ptr_;
     rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_subscription_;
     PersistParametersClient persist_param_client_;
     static rclcpp::Logger client_logger_;
@@ -208,17 +208,17 @@ void parameter_callback(const rcl_interfaces::msg::ParameterEvent::SharedPtr msg
       const rclcpp::NodeOptions & options)
       : persist_param_client_(node_name, options)
     {
-        rclcpp::Logger client_logger_ = rclcpp::get_logger("client");
-      if(!wait_param_server_ready()) 
-      {
-        
-        auto param_client = std::make_shared<PersistParametersClient>(node_name,options);
-        parameter_event_subscription_ = param_client->create_subscription<rcl_interfaces::msg::ParameterEvent>(
-            "/parameter_events", 10, [this](const rcl_interfaces::msg::ParameterEvent::SharedPtr msg) {
-                this->parameter_callback(msg);});
-      }
+     persist_param_client_ptr_=std::make_shared<PersistParametersClient>(node_name, options);
+     client_logger_ = rclcpp::get_logger("client");
+        if (!wait_param_server_ready()) {
             throw NoServerError();
-      }
+        }
+        // 使用 persist_param_client_ 创建订阅
+        parameter_event_subscription_ = persist_param_client_.create_subscription<rcl_interfaces::msg::ParameterEvent>(
+            "/parameter_events", 10, [this](const rcl_interfaces::msg::ParameterEvent::SharedPtr msg) {
+                this->parameter_callback(msg);
+            });
+    }
       
     
 
