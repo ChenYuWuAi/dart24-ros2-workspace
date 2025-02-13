@@ -70,6 +70,8 @@ namespace motor_controller {
     extern pid_angle_velocity_controller<double> MotorPitchLSController;
     extern pid_angle_velocity_controller<double> MotorLoadController[2];
 
+    extern pid_controller<double> MotorLoadSyncController;
+
     [[noreturn]] void pid_control_task(void * pvParameter);
 }
 #endif //DART_25_CONTROLLER_H

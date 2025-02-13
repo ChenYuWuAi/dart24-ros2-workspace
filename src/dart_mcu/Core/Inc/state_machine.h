@@ -16,9 +16,9 @@ namespace state_machine {
     // 状态机:
     // Update method: Broadcast
     // 0. 上电状态 复位 Action: Reset
-    // 1. 保护状态 遥控器左打上
-    // 2. 调试模式 遥控器左打中
-    // 3. 比赛模式 Action = Wait, Launch, Reload, Reset 遥控器左打下
+    // 1. 保护状态 遥控器右打上
+    // 2. 调试模式 遥控器右打中
+    // 3. 比赛模式 Action = Wait, Launch, Reload, Reset 遥控器右打下
     enum E_Dart_State {
         Boot = 100,
         Protect = 101,
@@ -34,7 +34,7 @@ namespace state_machine {
         Undefined
     };
 
-    enum E_ActionReturnState {
+    enum E_ResetActionReturnState {
         Operating,
         Finished,
         Failed
@@ -50,8 +50,13 @@ namespace state_machine {
 
     struct Dart_FSM : public FSM {
         bool boot_success = false;
+
+        // ActionResetMotors
         bool ActionResetMotors_Load_0_Success = false;
         bool ActionResetMotors_Load_1_Success = false;
+
+        // ActionRemote
+        uint8_t ActionRemote_MotorLoad_State = 0;
     public:
         void start();
     };

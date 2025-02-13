@@ -38,9 +38,7 @@ namespace motor {
 
         // Round & Position
         int current_round_;
-        int current_round_last_;
         int current_angle_;
-        int current_angle_last_;
 
         // Update Time and Disconnect check
         TickType_t last_update_time_;
@@ -54,6 +52,7 @@ namespace motor {
         // Motor State
         E_MotorState motor_state_ = DISCONNECTED;
     private:
+        int current_angle_last_;
         // Motor Angle Reverse Flag
         bool angle_reverse_;
         bool first_decode_ = false;
@@ -69,7 +68,6 @@ namespace motor {
             target_current_ = 0;
             current_velocity_ = 0;
             current_round_ = 0;
-            current_round_last_ = 0;
             last_update_time_ = xTaskGetTickCount();
             motor_state_ = DISCONNECTED;
             motor_type_ = motor_type;

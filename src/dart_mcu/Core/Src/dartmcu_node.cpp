@@ -218,7 +218,7 @@ void destroy_entities() {
 }
 
 void subscription_buzzer_callback(const void *msgin) {
-    const std_msgs__msg__Int32 *msg = (const std_msgs__msg__Int32 *) msgin;
+    const auto *msg = (const std_msgs__msg__Int32 *) msgin;
     switch (msg->data) {
         case song_list::Eautopilot_disconnect:
             soundEffectManager.addSoundEffect(BUZZER_NOTE(buzzer_autopilot_disconnect));

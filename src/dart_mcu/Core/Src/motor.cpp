@@ -40,7 +40,6 @@ namespace motor {
 
     void motor_rm::resetRound() {
         current_round_ = 0;
-        current_round_last_ = 0;
     }
 
     void motor_rm::decodeCanMsg(CAN_RxHeaderTypeDef *rxHeader, const uint8_t *rxData) {
@@ -48,7 +47,6 @@ namespace motor {
         if (rxHeader->IDE == CAN_ID_STD) {
             // 更新last
             current_angle_last_ = current_angle_;
-            current_round_last_ = current_round_;
 
             if (angle_reverse_)
                 current_angle_ = 8191 - ((rxData[0] << 8) | rxData[1]);

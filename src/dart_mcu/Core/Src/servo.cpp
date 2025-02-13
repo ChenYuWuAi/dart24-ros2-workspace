@@ -15,7 +15,6 @@ void servo::begin(TIM_HandleTypeDef *htim, uint32_t channel, uint32_t timerClock
     maxAngle_ = maxAngle;
 
     pwm_.setCompareValue(calCompareValue(initialAngle));
-    pwm_.start();
 }
 
 void servo::setAngle(uint16_t angle) {
@@ -23,6 +22,14 @@ void servo::setAngle(uint16_t angle) {
     if (angle > maxAngle_) angle = maxAngle_;
 
     pwm_.setCompareValue(calCompareValue(angle));
+}
+
+void servo::enable() {
+    pwm_.start();
+}
+
+void servo::disable() {
+    pwm_.stop();
 }
 
 inline uint32_t servo::calCompareValue(uint16_t angle) {

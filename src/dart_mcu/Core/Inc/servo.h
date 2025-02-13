@@ -24,6 +24,10 @@ public:
 
     void setAngle(uint16_t angle);
 
+    void enable();
+
+    void disable();
+
 private:
     inline uint32_t calCompareValue(uint16_t angle);
 };

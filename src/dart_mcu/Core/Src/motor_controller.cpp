@@ -49,6 +49,9 @@ namespace motor_controller {
             )
     };
 
+    pid_controller<double> MotorLoadSyncController = pid_controller<double>(15.0, 0.5, 2.0, 1000.0, 500.0, 300.0,
+                                                                            300.0);
+
     template<typename T>
     pid_controller<T>::pid_controller(T kp, T ki, T kd, T sum_error_max, T p_max, T i_max, T output_max)
             :
@@ -136,6 +139,14 @@ namespace motor_controller {
 
         uint8_t can_array[8];
 
+
+        // Create Motors
+        motor::MotorTriggerLS.create(10000, motor::E_MotorType::M2006, 1);  // 扳机丝杆电机
+        motor::MotorYawLS.create(16384, motor::E_MotorType::GM6020, 2);      // 偏航丝杆电机
+        motor::MotorPitchLS.create(16384, motor::E_MotorType::GM6020, 1);    // 俯仰丝杆电机
+        motor::MotorLoad[0].create(16384, motor::E_MotorType::M3508, 2);    // 装填电机1
+        motor::MotorLoad[1].create(16384, motor::E_MotorType::M3508, 3, true);    // 装填电机2
+
         // Wait for Motor to Connect
         while (motor::MotorYawLS.motor_state_ == motor::E_MotorState::DISCONNECTED ||
                motor::MotorLoad[0].motor_state_ == motor::E_MotorState::DISCONNECTED ||
@@ -173,6 +184,12 @@ namespace motor_controller {
                 motor::update_can_array(can_array, 1, motor::MotorYawLS.updateCurrent());
 
                 HAL_CAN_AddTxMessage(&hcan2, &tx_header, can_array, &tx_mailbox);
+            }
+            {
+                // 更新同步控制器
+                MotorLoadSyncController.update(motor_controller::MotorLoadController[0].current_angle_with_rounds_ -
+                                               motor_controller::MotorLoadController[1].current_angle_with_rounds_);
+
             }
             vTaskDelayUntil(&xLastWakeTime, 1);
         }

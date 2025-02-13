@@ -218,7 +218,8 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
             ) {
         // 双缓�?
         static uint8_t decode_memory_ = MEMORY0;
-        HAL_UARTEx_ReceiveToIdle_DMA(&huart1, judge_rx_buffer[(decode_memory_ + 1) % 2],
+        
+        HAL_UARTEx_ReceiveToIdle_DMA(&huart3, judge_rx_buffer[(decode_memory_ + 1) % 2],
                                      UART6_MAX_RECEIVE_BUFFER_LENGTH);
         RefereeReceive(Size, judge_rx_buffer[decode_memory_]
         );
